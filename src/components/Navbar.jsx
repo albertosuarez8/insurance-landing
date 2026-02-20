@@ -12,7 +12,7 @@ export default function Navbar() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2">
           <img
-            src="/logos/BoA_Logo-03.png"
+            src={`${process.env.PUBLIC_URL || ""}/logos/BoA_Logo-03.png`}
             alt={t("nav.title")}
             className="h-11 w-auto sm:h-14"
           />

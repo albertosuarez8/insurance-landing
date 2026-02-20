@@ -11,7 +11,7 @@ export default function QuoteResult() {
         <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <Link to="/" className="flex items-center">
             <img
-              src="/logos/testlogo.png"
+              src={`${process.env.PUBLIC_URL || ""}/logos/testlogo.png`}
               alt={t("quoteResult.title")}
               className="h-11 w-auto sm:h-14"
             />

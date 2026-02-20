@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <div className="flex flex-col gap-3">
             <img
-              src="/logos/footer.png"
+              src={`${process.env.PUBLIC_URL || ""}/logos/footer.png`}
               alt=""
               className="h-12 w-auto max-w-[180px] object-contain object-left"
               aria-hidden
