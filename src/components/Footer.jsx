@@ -17,8 +17,7 @@ const locationIcon = (
   </svg>
 );
 
-const PRIVACY_URL =
-  "https://boaprinsurance.com/wp-content/uploads/2025/11/Politica-de-Priviacidad-Boapr-Insurance.pdf";
+const PRIVACY_URL = `${process.env.PUBLIC_URL || ""}/Boapr-Insurance-Privacy-Policy.pdf`;
 
 export default function Footer() {
   const { t } = useLanguage();
