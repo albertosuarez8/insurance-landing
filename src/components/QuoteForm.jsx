@@ -14,6 +14,8 @@ export default function QuoteForm() {
   const [additional, setAdditional] = useState("");
   const [emailTouched, setEmailTouched] = useState(false);
   const [phoneTouched, setPhoneTouched] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
   const navigate = useNavigate();
   const { t } = useLanguage();
 
@@ -44,8 +46,40 @@ export default function QuoteForm() {
     businessType !== "" &&
     employees !== "";
 
-  function handleSubmit(e) {
+  const formspreeEndpoint = process.env.REACT_APP_FORMSPREE_ENDPOINT;
+
+  async function handleSubmit(e) {
     e.preventDefault();
+    setSubmitError(null);
+
+    const payload = {
+      company: company.trim(),
+      name: name.trim(),
+      phone: phone.trim(),
+      email: email.trim(),
+      businessType,
+      employees,
+      ...(additional.trim() && { additional: additional.trim() }),
+      _subject: `Quote request from ${name.trim()} (${company.trim()})`,
+    };
+
+    if (formspreeEndpoint) {
+      setSubmitting(true);
+      try {
+        const res = await fetch(formspreeEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("Submit failed");
+      } catch (err) {
+        setSubmitError(t("quoteForm.submitError") ?? "Something went wrong. Please try again.");
+        setSubmitting(false);
+        return;
+      }
+      setSubmitting(false);
+    }
+
     navigate("/quote-result");
   }
 
@@ -254,16 +288,19 @@ export default function QuoteForm() {
             </span>
           </label>
 
+          {submitError && (
+            <p className="mt-3 text-sm text-red-600">{submitError}</p>
+          )}
           <button
             type="submit"
-            disabled={!isComplete}
+            disabled={!isComplete || submitting}
             className={`mt-5 w-full rounded-xl px-5 py-3 text-sm font-medium transition ${
-              isComplete
+              isComplete && !submitting
                 ? "cursor-pointer bg-brand-500 text-white shadow-md hover:bg-brand-600 hover:shadow-lg"
                 : "cursor-not-allowed bg-toggle text-white shadow-none"
             }`}
           >
-            {t("quoteForm.getMyQuote")}
+            {submitting ? (t("quoteForm.sending") ?? "Sending…") : t("quoteForm.getMyQuote")}
           </button>
         </form>
           </AnimateIn>

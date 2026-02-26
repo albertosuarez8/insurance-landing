@@ -41,6 +41,8 @@ const translations = {
       privacyPrefix: "I have read and agree to the",
       privacyLink: "privacy policy",
       getMyQuote: "Get My Quote",
+      sending: "Sending…",
+      submitError: "Something went wrong. Please try again.",
       businessTypes: [
         "Contractor",
         "Retail",
@@ -205,6 +207,8 @@ const translations = {
       privacyPrefix: "He leído y acepto la",
       privacyLink: "política de privacidad",
       getMyQuote: "Obtener Cotización",
+      sending: "Enviando…",
+      submitError: "Algo salió mal. Por favor intente de nuevo.",
       emailInvalid: "Por favor ingrese un correo electrónico válido.",
       phoneInvalid: "Por favor ingrese un número de teléfono válido (al menos 10 dígitos).",
       businessTypes: [

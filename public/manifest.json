@@ -3,8 +3,8 @@
   "name": "Create React App Sample",
   "icons": [
     {
-      "src": "logos/BoA_Logo.svg",
-      "type": "image/svg+xml",
+      "src": "logos/BoA_Logo.png",
+      "type": "image/png",
       "sizes": "any"
     }
   ],

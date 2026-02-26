@@ -7,7 +7,6 @@ const options = [
 
 export default function LanguageToggle() {
   const { locale, setLocale } = useLanguage();
-  // Show the language you can switch to (other than current)
   const other = options.find((o) => o.locale !== locale) ?? options[1];
 
   function toggle() {

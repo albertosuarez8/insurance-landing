@@ -2,7 +2,7 @@
   "name": "insurance-landing",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://albertosuarez8.github.io/insurance-landing",
+  "homepage": "https://boaprinsurance.com",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
