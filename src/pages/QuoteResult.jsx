@@ -3,13 +3,14 @@ import { useLanguage } from "../context/LanguageContext";
 import LanguageToggle from "../components/LanguageToggle";
 
 export default function QuoteResult() {
-  const { t } = useLanguage();
+  const { t, isHomeownersFlow } = useLanguage();
+  const homePath = isHomeownersFlow ? "/homeowners" : "/";
 
   return (
     <div className="app-root min-h-screen bg-cream">
       <header className="bg-white">
         <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-          <Link to="/" className="flex items-center">
+          <Link to={homePath} className="flex items-center">
             <img
               src={`${process.env.PUBLIC_URL || ""}/logos/BoA_Logo-03.png`}
               alt={t("quoteResult.title")}
@@ -19,7 +20,7 @@ export default function QuoteResult() {
           <div className="flex items-center gap-3">
             <LanguageToggle />
             <Link
-              to="/"
+              to={homePath}
               className="rounded-md bg-brand-500 px-3.5 py-1.5 text-sm font-medium text-white transition hover:bg-brand-600"
             >
               {t("nav.backToHome")}
@@ -58,7 +59,7 @@ export default function QuoteResult() {
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Link
-              to="/"
+              to={homePath}
               className="inline-flex items-center justify-center rounded-lg bg-brand-500 px-4 py-2 text-sm font-medium text-white shadow-md transition hover:bg-brand-600"
             >
               {t("nav.backToHome")}

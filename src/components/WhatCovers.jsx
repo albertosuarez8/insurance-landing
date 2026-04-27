@@ -2,8 +2,11 @@ import { useLanguage } from "../context/LanguageContext";
 import { AnimateIn } from "./AnimateIn";
 
 export default function WhatCovers() {
-  const { t } = useLanguage();
+  const { t, isHomeownersFlow } = useLanguage();
   const items = t("whatCovers.items");
+  const imageSrc = isHomeownersFlow
+    ? `${process.env.PUBLIC_URL || ""}/imgs/house.jpeg`
+    : "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=900&h=600&fit=crop";
 
   return (
     <section className="bg-cream py-12 sm:py-16">
@@ -32,7 +35,7 @@ export default function WhatCovers() {
           <div className="mt-6 flex-1 lg:mt-0">
             <div className="relative h-56 w-full overflow-hidden rounded-2xl bg-black/20 sm:h-64 lg:h-full">
               <img
-                src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=900&h=600&fit=crop"
+                src={imageSrc}
                 alt={t("whatCovers.title")}
                 className="h-full w-full object-cover"
               />

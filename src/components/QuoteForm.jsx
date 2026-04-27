@@ -17,11 +17,12 @@ export default function QuoteForm() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, isHomeownersFlow } = useLanguage();
 
   const businessTypes = t("quoteForm.businessTypes");
   const employeeCounts = t("quoteForm.employeeCounts");
   const heroBadges = t("hero.badges");
+  const homeownersBackgroundImage = `${process.env.PUBLIC_URL || ""}/imgs/background.jpeg`;
 
   const isValidEmail = (value) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value?.trim() ?? "");
@@ -46,7 +47,9 @@ export default function QuoteForm() {
     businessType !== "" &&
     employees !== "";
 
-  const formspreeEndpoint = process.env.REACT_APP_FORMSPREE_ENDPOINT;
+  const formspreeEndpoint = isHomeownersFlow
+    ? process.env.REACT_APP_FORMSPREE_HOMEOWNERS_ENDPOINT || process.env.REACT_APP_FORMSPREE_ENDPOINT
+    : process.env.REACT_APP_FORMSPREE_ENDPOINT;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -80,7 +83,7 @@ export default function QuoteForm() {
       setSubmitting(false);
     }
 
-    navigate("/quote-result");
+    navigate(isHomeownersFlow ? "/homeowners/quote-result" : "/quote-result");
   }
 
   const checkIcon = (
@@ -94,8 +97,24 @@ export default function QuoteForm() {
       id="quote"
       className="relative -mt-24 scroll-mt-24 overflow-hidden pt-24 pb-12 sm:pb-16 md:pb-20"
     >
+      {isHomeownersFlow && (
+        <div
+          className="absolute inset-0 bg-cover opacity-20"
+          style={{
+            backgroundImage: `url("${homeownersBackgroundImage}")`,
+            backgroundPosition: "20% center",
+          }}
+          aria-hidden="true"
+        />
+      )}
       {/* Base gradient: bottom-right, slate-50 → white → orange-50/30 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-orange-50/30" />
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${
+          isHomeownersFlow
+            ? "from-white/45 via-white/35 to-orange-50/35"
+            : "from-slate-50 via-white to-orange-50/30"
+        }`}
+      />
       {/* Right half: orange wash fading to transparent */}
       <div className="absolute top-0 right-0 h-full w-1/2 bg-gradient-to-l from-orange-100/40 to-transparent" />
       {/* Blurred orbs for depth */}
@@ -148,74 +167,149 @@ export default function QuoteForm() {
               {t("quoteForm.heading")}
             </h3>
           <div className="grid gap-3 sm:grid-cols-2">
-            <div>
-              <label htmlFor="company" className="mb-1 block text-sm font-medium text-brand-500">
-                {t("quoteForm.companyName")}
-              </label>
-              <input
-                id="company"
-                type="text"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                placeholder={t("quoteForm.companyPlaceholder")}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-              />
-            </div>
-            <div>
-              <label htmlFor="name" className="mb-1 block text-sm font-medium text-brand-500">
-                {t("quoteForm.yourName")}
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder={t("quoteForm.namePlaceholder")}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
-              />
-            </div>
-            <div>
-              <label htmlFor="phone" className="mb-1 block text-sm font-medium text-brand-500">
-                {t("quoteForm.phone")}
-              </label>
-              <input
-                id="phone"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                onBlur={() => setPhoneTouched(true)}
-                placeholder={t("quoteForm.phonePlaceholder")}
-                className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 ${
-                  showPhoneError
-                    ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                    : "border-slate-300 focus:border-brand-500"
-                }`}
-              />
-              {showPhoneError && (
-                <p className="mt-1 text-xs text-red-600">{t("quoteForm.phoneInvalid")}</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor="email" className="mb-1 block text-sm font-medium text-brand-500">
-                {t("quoteForm.email")}
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={() => setEmailTouched(true)}
-                placeholder={t("quoteForm.emailPlaceholder")}
-                className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 ${
-                  showEmailError
-                    ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                    : "border-slate-300 focus:border-brand-500"
-                }`}
-              />
-              {showEmailError && (
-                <p className="mt-1 text-xs text-red-600">{t("quoteForm.emailInvalid")}</p>
-              )}
-            </div>
+            {isHomeownersFlow ? (
+              <>
+                <div>
+                  <label htmlFor="name" className="mb-1 block text-sm font-medium text-brand-500">
+                    {t("quoteForm.yourName")}
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={t("quoteForm.namePlaceholder")}
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="mb-1 block text-sm font-medium text-brand-500">
+                    {t("quoteForm.email")}
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onBlur={() => setEmailTouched(true)}
+                    placeholder={t("quoteForm.emailPlaceholder")}
+                    className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 ${
+                      showEmailError
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                        : "border-slate-300 focus:border-brand-500"
+                    }`}
+                  />
+                  {showEmailError && (
+                    <p className="mt-1 text-xs text-red-600">{t("quoteForm.emailInvalid")}</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="phone" className="mb-1 block text-sm font-medium text-brand-500">
+                    {t("quoteForm.phone")}
+                  </label>
+                  <input
+                    id="phone"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    onBlur={() => setPhoneTouched(true)}
+                    placeholder={t("quoteForm.phonePlaceholder")}
+                    className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 ${
+                      showPhoneError
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                        : "border-slate-300 focus:border-brand-500"
+                    }`}
+                  />
+                  {showPhoneError && (
+                    <p className="mt-1 text-xs text-red-600">{t("quoteForm.phoneInvalid")}</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="company" className="mb-1 block text-sm font-medium text-brand-500">
+                    {t("quoteForm.companyName")}
+                  </label>
+                  <input
+                    id="company"
+                    type="text"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder={t("quoteForm.companyPlaceholder")}
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <label htmlFor="company" className="mb-1 block text-sm font-medium text-brand-500">
+                    {t("quoteForm.companyName")}
+                  </label>
+                  <input
+                    id="company"
+                    type="text"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder={t("quoteForm.companyPlaceholder")}
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="name" className="mb-1 block text-sm font-medium text-brand-500">
+                    {t("quoteForm.yourName")}
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={t("quoteForm.namePlaceholder")}
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="mb-1 block text-sm font-medium text-brand-500">
+                    {t("quoteForm.phone")}
+                  </label>
+                  <input
+                    id="phone"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    onBlur={() => setPhoneTouched(true)}
+                    placeholder={t("quoteForm.phonePlaceholder")}
+                    className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 ${
+                      showPhoneError
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                        : "border-slate-300 focus:border-brand-500"
+                    }`}
+                  />
+                  {showPhoneError && (
+                    <p className="mt-1 text-xs text-red-600">{t("quoteForm.phoneInvalid")}</p>
+                  )}
+                </div>
+                <div>
+                  <label htmlFor="email" className="mb-1 block text-sm font-medium text-brand-500">
+                    {t("quoteForm.email")}
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onBlur={() => setEmailTouched(true)}
+                    placeholder={t("quoteForm.emailPlaceholder")}
+                    className={`w-full rounded-lg border bg-white px-3.5 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 ${
+                      showEmailError
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                        : "border-slate-300 focus:border-brand-500"
+                    }`}
+                  />
+                  {showEmailError && (
+                    <p className="mt-1 text-xs text-red-600">{t("quoteForm.emailInvalid")}</p>
+                  )}
+                </div>
+              </>
+            )}
             <div>
               <label htmlFor="business-type" className="mb-1 block text-sm font-medium text-brand-500">
                 {t("quoteForm.typeOfBusiness")}

@@ -1,7 +1,12 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Boapr Insurance",
+  "name": "General Liability Insurance | Boapr",
   "icons": [
+    {
+      "src": "favicon-32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    },
     {
       "src": "logos/BoA_Logo.png",
       "type": "image/png",
@@ -10,6 +15,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#F47A20",
   "background_color": "#ffffff"
 }

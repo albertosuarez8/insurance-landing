@@ -6,13 +6,18 @@ import WhatCovers from "../components/WhatCovers";
 import WhyChooseUs from "../components/WhyChooseUs";
 import FinalCTA from "../components/FinalCTA";
 import Footer from "../components/Footer";
+import HomeownersCarriers from "../components/HomeownersCarriers";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Landing() {
+  const { isHomeownersFlow } = useLanguage();
+
   return (
     <div className="app-root min-h-screen bg-cream">
       <Navbar />
       <main className="w-full pt-24">
         <QuoteForm />
+        {isHomeownersFlow && <HomeownersCarriers />}
         <StatsBar />
         <WhyYouNeed />
         <WhatCovers />
